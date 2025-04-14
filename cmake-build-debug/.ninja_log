@@ -1,0 +1,6 @@
+# ninja log v6
+0	227	1744619427814215951	CMakeFiles/simle.dir/IPv4PrefixSet.cpp.o	fb8a8363a35046f0
+0	271	1744619427814215951	CMakeFiles/simle.dir/main.cpp.o	c5285c4aad39b624
+1	224	1744619442978522812	CMakeFiles/simle.dir/IPv4PrefixSet.cpp.o	fb8a8363a35046f0
+1	266	1744619442978522812	CMakeFiles/simle.dir/main.cpp.o	c5285c4aad39b624
+266	306	1744619443243528184	simle	e56475ac09a6d3f5
