@@ -54,3 +54,19 @@ bool IPv4PrefixSet::del(uint32_t ip, uint8_t maskLength) {
 
     return false;
 }
+
+int IPv4PrefixSet::check(uint32_t ip) const {
+    prefixNode* current = head;
+    int maxMask = -1;
+
+    while (current != nullptr) {
+        uint32_t mask = (0xFFFFFFFF << (32 - current->maskLength));
+        if ((ip & mask) == (current->ip & mask)) {
+            if (current->maskLength > maxMask) {
+                maxMask = current->maskLength;
+            }
+        }
+        current = current->next;
+    }
+    return maxMask;
+}

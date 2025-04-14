@@ -17,7 +17,7 @@ public:
 
     bool add(uint32_t base, uint8_t maskLength);
     bool del(uint32_t base, uint8_t maskLength);
-    //int check(uint32_t ip) const;
+    int check(uint32_t ip) const;
 };
 
 #endif
