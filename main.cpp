@@ -1,32 +1,46 @@
-#include <iostream>
 #include "IPv4PrefixSet.h"
+#include <gtest/gtest.h>
 
-std::string ipToString(uint32_t ip) {
-    return std::to_string((ip >> 24) & 0xFF) + "." +
-           std::to_string((ip >> 16) & 0xFF) + "." +
-           std::to_string((ip >> 8) & 0xFF) + "." +
-           std::to_string(ip & 0xFF);
+TEST(IPv4PrefixSetTest, AddValidPrefixes) {
+    IPv4PrefixSet set;
+    EXPECT_TRUE(set.add(0xC0A80000, 16)); // 192.168.0.0/16
+    EXPECT_TRUE(set.add(0xC0A80100, 24)); // 192.168.1.0/24
 }
 
-int main() {
-    IPv4PrefixSet prefixSet;
+TEST(IPv4PrefixSetTest, AddDuplicatePrefix) {
+    IPv4PrefixSet set;
+    EXPECT_TRUE(set.add(0xC0A80000, 16));
+    EXPECT_FALSE(set.add(0xC0A80000, 16));
+}
 
-    uint32_t ip1 = (192 << 24) | (168 << 16) | (1 << 8) | 0;  // 192.168.1.0
-    uint32_t ip2 = (10 << 24) | (0 << 16) | (0 << 8) | 0;     // 10.0.0.0
+TEST(IPv4PrefixSetTest, DeleteExistingAndNonExistingPrefixes) {
+    IPv4PrefixSet set;
+    set.add(0xC0A80000, 16);
+    EXPECT_TRUE(set.del(0xC0A80000, 16));
+    EXPECT_FALSE(set.del(0xC0A80000, 16));
+    EXPECT_FALSE(set.del(0xC0A80100, 24));
+}
 
-    std::cout << "Adding prefixes:" << std::endl;
-    if (prefixSet.add(ip1, 24)) {
-        std::cout << "Added: " << ipToString(ip1) << "/24" << std::endl;
-    }
+TEST(IPv4PrefixSetTest, CheckMostSpecificMatch) {
+    IPv4PrefixSet set;
+    set.add(0xC0A80000, 16); // 192.168.0.0/16
+    set.add(0xC0A80100, 24); // 192.168.1.0/24
 
-    std::cout << "Adding prefixes (second time):" << std::endl;
-    if (prefixSet.add(ip1, 26)) {
-        std::cout << "Added: " << ipToString(ip1) << "/26" << std::endl;
-    }
+    EXPECT_EQ(set.check(0xC0A8017B), 24);
+}
 
-    std::cout << "\nChecking prefix:" << std::endl;
-    int result = prefixSet.check(ip1);
-    std::cout << "Check result: " << result << std::endl;
+TEST(IPv4PrefixSetTest, CheckNoMatch) {
+    IPv4PrefixSet set;
+    set.add(0xC0A80000, 16); // 192.168.0.0/16
+    EXPECT_EQ(set.check(0x0A000001), -1);
+}
 
-    return 0;
+TEST(IPv4PrefixSetTest, EdgeCases_Mask0AndMask32) {
+    IPv4PrefixSet set;
+    set.add(0x00000000, 0); // 0.0.0.0/0
+    set.add(0xC0A8017B, 32); // 192.168.1.123/32
+
+    EXPECT_EQ(set.check(0xC0A8017B), 32);
+
+    EXPECT_EQ(set.check(0x8F000001), 0); // 143.0.0.1
 }

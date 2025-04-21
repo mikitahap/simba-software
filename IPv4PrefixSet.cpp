@@ -60,7 +60,7 @@ int IPv4PrefixSet::check(uint32_t ip) const {
     int maxMask = -1;
 
     while (current != nullptr) {
-        uint32_t mask = (0xFFFFFFFF << (32 - current->maskLength));
+        uint32_t mask = (current->maskLength == 0) ? 0 : (0xFFFFFFFF << (32 - current->maskLength));
         if ((ip & mask) == (current->ip & mask)) {
             if (current->maskLength > maxMask) {
                 maxMask = current->maskLength;
