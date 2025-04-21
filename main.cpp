@@ -21,7 +21,7 @@ TEST(IPv4PrefixSetTest, DeleteExistingAndNonExistingPrefixes) {
 
     EXPECT_TRUE(set.del(0xA000000, 16));
     EXPECT_FALSE(set.del(0xA000000, 16));
-    EXPECT_FALSE(set.del(0xC0A80100, 24));
+    EXPECT_FALSE(set.del(0xC0A80100, 24));q
 }
 
 TEST(IPv4PrefixSetTest, CheckMostSpecificMatch) {

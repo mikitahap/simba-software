@@ -37,7 +37,7 @@ bool IPv4PrefixSet::add(uint32_t ip, uint8_t maskLength) {
     return true;
 }
 
-bool IPv4PrefixSet::del(uint32_t ip, uint8_t maskLength) {
+    bool IPv4PrefixSet::del(uint32_t ip, uint8_t maskLength) {
     if (maskLength > 32) {
         return false;
     }

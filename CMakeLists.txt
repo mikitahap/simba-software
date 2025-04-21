@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(simle)
+project(tests)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,13 +13,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(simle
+add_executable(tests
         main.cpp
         IPv4PrefixSet.cpp
 )
 
 # Linking google test
-target_link_libraries(simle
+target_link_libraries(tests
         gtest
         gtest_main
         pthread
