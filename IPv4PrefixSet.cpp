@@ -12,11 +12,18 @@ IPv4PrefixSet::~IPv4PrefixSet() {
     }
 }
 
+uint32_t IPv4PrefixSet::normalizePrefix(uint32_t ip, uint8_t maskLength) {
+    if (maskLength == 0) return 0;
+    if (maskLength >= 32) return ip;
+    uint32_t mask = 0xFFFFFFFF << (32 - maskLength);
+    return ip & mask;
+}
+
 bool IPv4PrefixSet::add(uint32_t ip, uint8_t maskLength) {
     if (maskLength > 32) {
         return false;
     }
-
+    ip = IPv4PrefixSet::normalizePrefix(ip, maskLength);
     prefixNode* current = head;
     while (current != nullptr) {
         if (current->ip == ip && current->maskLength == maskLength) {
@@ -34,7 +41,7 @@ bool IPv4PrefixSet::del(uint32_t ip, uint8_t maskLength) {
     if (maskLength > 32) {
         return false;
     }
-
+    ip = IPv4PrefixSet::normalizePrefix(ip, maskLength);
     prefixNode* current = head;
     prefixNode* previous = nullptr;
     while (current != nullptr) {
