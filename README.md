@@ -82,5 +82,5 @@ Unit tests are implemented using `gtest` library and divided into 10 test groups
    ```
 4. Running the Tests:
    ```
-   ./main
+   ./tests
    ```
